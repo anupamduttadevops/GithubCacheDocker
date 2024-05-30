@@ -28,7 +28,10 @@ jobs:
           username: anupamdevops
           password: anuPAM666***
 
-      - uses: whoan/docker-build-with-cache-action@v5
+      - name: registry image cache
+        env:
+          DOCKER_BUILDKIT: 1
+        uses: whoan/docker-build-with-cache-action@v5
         with:
           username: anupamdevops
           password: "${{ secrets.DOCKER_HUB_PASSWORD }}"
