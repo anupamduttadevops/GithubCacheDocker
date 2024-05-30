@@ -23,11 +23,13 @@ jobs:
         with:
           install: true
 
-      - name: Go Build Cache for Docker
+      - name: Cache Docker layers
         uses: actions/cache@v4
         with:
-          path: go-build-cache
-          key: ${{ runner.os }}-go-build-cache-${{ hashFiles('**/go.sum') }}
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-   
 
       - name: inject go-build-cache into docker
         uses: reproducible-containers/buildkit-cache-dance@4b2444fec0c0fb9dbf175a96c094720a692ef810 # v2.1.4
@@ -48,5 +50,10 @@ jobs:
           file: Dockerfile
           push: false
           tags: myapp:latest
-          cache-from: type=gha,scope=cotainer
-          cache-to: type=gha,scope=cotainer,mode=max
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
