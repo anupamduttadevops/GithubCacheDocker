@@ -38,35 +38,5 @@ jobs:
           image_name: anupamdevops/myapp
           tag: cache
 
-      
-      - name: Build Docker image with static tag
-        uses: docker/build-push-action@v5.3.0
-        with:
-          context: .
-          file: Dockerfile
-          push: false
-          tags: anupamdevops/myapp:1
-          # cache-from: type=local,src=/tmp/.buildx-cache
-          # cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
 
-
-      # - name: Tag Docker image with commit hash
-      #   run: |
-      #     COMMIT_HASH=$(git rev-parse --short HEAD)
-      #     docker tag myapp:latest myapp:${COMMIT_HASH}
-
-      # - name: Build Docker image with cached layers
-      #   uses: docker/build-push-action@v5.3.0
-      #   with:
-      #     context: .
-      #     file: Dockerfile
-      #     push: false
-      #     tags: myapp:latest
-      #     cache-from: type=local,src=/tmp/.buildx-cache
-      #     cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-
-      # - name: Move cache
-      #   run: |
-      #     rm -rf /tmp/.buildx-cache
-      #     mv /tmp/.buildx-cache-new /tmp/.buildx-cache
