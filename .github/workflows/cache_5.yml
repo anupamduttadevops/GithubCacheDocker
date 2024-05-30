@@ -53,15 +53,15 @@ jobs:
       # - name: Build Docker image
       #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v5.3.0
-        with:
-          context: .
-          file: Dockerfile
-          push: false
-          tags: myapp:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      # - name: Build Docker image
+      #   uses: docker/build-push-action@v5.3.0
+      #   with:
+      #     context: .
+      #     file: Dockerfile
+      #     push: false
+      #     tags: myapp:latest
+      #     cache-from: type=local,src=/tmp/.buildx-cache
+      #     cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Move cache
         run: |
