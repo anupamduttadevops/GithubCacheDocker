@@ -1,0 +1,43 @@
+name: cache
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #     - develop
+  #   paths-ignore:
+  #     - '.github/**'
+  #     - '*.md'
+
+jobs:
+  build:
+    name: Build Docker Image with Cache
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.5
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.3.0
+        with:
+          install: true
+
+      # - name: Cache Docker layers
+      #   uses: actions/cache@v4.0.2
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     # key: ${{ runner.os }}-buildx-${{ github.sha }}
+      #     key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile', '**/go.sum') }}
+
+      #     restore-keys: |
+      #       ${{ runner.os }}-buildx-
+      - name: Build Docker image
+        uses: docker/build-push-action@v5.3.0
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          tags: myapp:latest
+          cache-from: type=gha,scope=cotainer
+          cache-to: type=gha,scope=cotainer,mode=max
