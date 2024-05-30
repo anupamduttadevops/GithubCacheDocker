@@ -21,22 +21,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.3.0
 
-      # - name: Cache Docker layers
-      #   uses: actions/cache@v4.0.2
-      #   with:
-      #     path: /tmp/.buildx-cache
-      #     # key: ${{ runner.os }}-buildx-${{ github.sha }}
-      #     key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile', '**/go.sum') }}
-
-          # restore-keys: |
-          #   ${{ runner.os }}-buildx-
-      - name: Docker Layer Caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
+      - name: Cache Docker layers
+        uses: actions/cache@v4.0.2
         with:
-         key: docker-layer-caching-${{ github.workflow }}-{hash}
-         restore-keys: docker-layer-caching-${{ github.workflow }}-
-         concurrency: 3
-         skip-save: false
+          path: /tmp/.buildx-cache
+          # key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile', '**/go.sum', '**/go.mod') }}
+
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+            
+      # - name: Docker Layer Caching
+      #   uses: satackey/action-docker-layer-caching@v0.0.11
+      #   with:
+      #    key: docker-layer-caching-${{ github.workflow }}-{hash}
+      #    restore-keys: docker-layer-caching-${{ github.workflow }}-
+      #    concurrency: 3
+      #    skip-save: false
           
       - name: Build Docker image
         uses: docker/build-push-action@v5.3.0
@@ -45,7 +46,7 @@ jobs:
           file: Dockerfile
           push: false
           tags: myapp:latest
-          # cache-from: type=local,src=/tmp/.buildx-cache
-          # cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
           # cache-from: type=gha
           # cache-to: type=gha, mode=max
