@@ -27,13 +27,20 @@ jobs:
         with:
           username: anupamdevops
           password: anuPAM666***
-          
+
+      - uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: anupamdevops
+          password: anuPAM666***
+          image_name: hello-world
+
+      
       - name: Build Docker image with static tag
         uses: docker/build-push-action@v5.3.0
         with:
           context: .
           file: Dockerfile
-          push: true
+          push: false
           tags: anupamdevops/myapp:cache
           # cache-from: type=local,src=/tmp/.buildx-cache
           # cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
@@ -45,11 +52,11 @@ jobs:
       #     COMMIT_HASH=$(git rev-parse --short HEAD)
       #     docker tag myapp:latest myapp:${COMMIT_HASH}
 
-      # - uses: whoan/docker-build-with-cache-action@v5
-      #   with:
-      #     username: anupamdevops
-      #     password: "${{ secrets.DOCKER_HUB_PASSWORD }}"
-      #     image_name: hello-world
+      - uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: anupamdevops
+          password: "${{ secrets.DOCKER_HUB_PASSWORD }}"
+          image_name: hello-world
 
       # - name: Build Docker image with cached layers
       #   uses: docker/build-push-action@v5.3.0
