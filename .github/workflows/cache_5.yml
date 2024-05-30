@@ -36,9 +36,11 @@ jobs:
  
       - name: Build images
         run: |
-          docker buildx create --use --driver=docker-container
-          docker buildx build --tag my-image-name:$(date +%s) -f Dockerfile --set *.cache-to="type=gha,mode=max" --set *.cache-from="type=gha" --load
- 
+          docker buildx create --use --driver docker-container
+          docker buildx build --tag my-image-name:$(date +%s) -f Dockerfile \
+            --cache-from type=gha \
+            --cache-to type=gha,mode=max \
+            --output type=docker,dest=/tmp/.buildx-cache-new
 
 
       # - name: inject go-build-cache into docker
