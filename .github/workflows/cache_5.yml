@@ -32,7 +32,7 @@ jobs:
         with:
           username: anupamdevops
           password: "${{ secrets.DOCKER_HUB_PASSWORD }}"
-          image_name: hello-world
+          image_name: myapp:cache
 
       
       - name: Build Docker image with static tag
