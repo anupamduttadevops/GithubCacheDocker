@@ -21,13 +21,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.3.0
 
-      # - name: cache docker layer
-      #   uses: actions/cache@v4.0.2
-      #   with:
-      #     # path: /tmp/.buildx-cache
-      #     path: buildx-cache
-      #     # key: ${{ runner.os }}-buildx-${{ github.sha }}
-      #     key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile', '**/go.sum') }}
+      - name: cache docker layer
+        uses: actions/cache@v4.0.2
+        with:
+          # path: /tmp/.buildx-cache
+          path: buildx-cache
+          # key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile', '**/go.sum', '**/go.mod') }}
 
       - name: inject layer cache into docker
         id: cache-docker-layers
@@ -47,5 +47,5 @@ jobs:
           file: Dockerfile
           push: false
           tags: myapp:latest
-          # cache-from: type=gha 
-          # cache-to: type=gha, mode=max
+          cache-from: type=gha 
+          cache-to: type=gha, mode=max
