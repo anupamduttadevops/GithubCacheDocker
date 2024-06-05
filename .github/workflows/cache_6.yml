@@ -48,7 +48,7 @@ jobs:
         uses: docker/build-push-action@v5.3.0
         with:
           context: .
-          file: Dockerfile
+          file: Dockerfile_1
           push: false
           tags: myapp:latest
           cache-from: type=local,src=/tmp/.buildx-cache
