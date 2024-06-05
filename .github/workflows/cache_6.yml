@@ -1,4 +1,4 @@
-name: cache_6
+name: cache_3
 on:
   workflow_dispatch:
 
@@ -48,13 +48,13 @@ jobs:
         uses: docker/build-push-action@v5.3.0
         with:
           context: .
-          file: Dockerfile_1
+          file: Dockerfile
           push: false
           tags: myapp:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          build-args: BUILT_BINARY=myapp
 
       - name: Move new cache to old cache
         if: success()
         run: mv /tmp/.buildx-cache-new/* /tmp/.buildx-cache/
-
