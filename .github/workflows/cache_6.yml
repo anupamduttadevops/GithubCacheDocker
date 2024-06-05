@@ -32,16 +32,16 @@ jobs:
       - name: Build the application
         run: CGO_ENABLED=0 GOOS=linux go build -o myapp .
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          install: true
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3
+      #   with:
+      #     install: true
 
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile', '**/go.sum') }}
+          key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile', '**/go.sum', '**/go.mod') }}
           restore-keys: |
             ${{ runner.os }}-buildx-
 
@@ -57,4 +57,4 @@ jobs:
 
       - name: Move new cache to old cache
         if: success()
-        run: mv /tmp/.buildx-cache-new/* /tmp/.buildx-cache/
+        run: rsync -a /tmp/.buildx-cache-new/ /tmp/.buildx-cache/
