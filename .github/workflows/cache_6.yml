@@ -39,7 +39,10 @@ jobs:
           key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/go.sum', '**/go.mod') }}
           restore-keys: |
             ${{ runner.os }}-docker-
-
+            
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
       - name: Build Docker image
         run: |
           docker build \
