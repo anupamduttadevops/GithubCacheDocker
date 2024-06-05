@@ -16,38 +16,28 @@ jobs:
         with:
           go-version: '1.21'
 
-      # Restore Go modules cache
-      - name: Restore Go modules cache
-        uses: actions/cache@v4
+      - name: Cache Go modules
+        id: cache-go-modules
+        uses: actions/cache@v2
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-mod-
-
-      # Restore Go build cache
-      - name: Restore Go build cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/go-build
-          key: ${{ runner.os }}-go-build-${{ hashFiles('**/*.go', '**/go.mod', '**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-build-
+          key: ${{ runner.os }}-go-modules-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-go-modules-
 
       - name: Install dependencies
         run: go mod download
 
-      # This step builds the Go application with the necessary environment variables
       - name: Build the application
         run: |
-          mkdir -p build
-          CGO_ENABLED=0 GOOS=linux go build -o build/myapp .
+          go build -o myapp .
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Cache Go binary
+        uses: actions/cache@v2
         with:
-          install: true
-
+          path: .  # Cache the built binary
+          key: ${{ runner.os }}-go-binary-${{ hashFiles('myapp') }}
+          restore-keys: ${{ runner.os }}-go-binary-
+          
       - name: Build Docker image
         uses: docker/build-push-action@v5.3.0
         with:
