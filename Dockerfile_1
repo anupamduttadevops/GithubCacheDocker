@@ -1,13 +1,12 @@
-# Base image for the final image
+FROM golang:1.17-alpine AS builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+COPY myapp ./
+
 FROM alpine:latest
-
-WORKDIR /root/
-
-# Copy the pre-built binary from the workflow
-COPY build/myapp .
-
-# Expose the application port
+WORKDIR /app
+COPY --from=builder /app/myapp .
 EXPOSE 8080
-
-# Command to run the application
 CMD ["./myapp"]
