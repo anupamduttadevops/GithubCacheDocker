@@ -1,6 +1,6 @@
 module github.com/anupamduttadevops/github-cache-project
 
-go 1.21.6
+go 1.21
 
 require (
 	github.com/golang/mock v1.4.4
