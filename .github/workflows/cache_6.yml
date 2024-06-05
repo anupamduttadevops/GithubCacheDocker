@@ -60,4 +60,4 @@ jobs:
         if: success()
         run: |
           rm -rf ~/.cache/go-build
-          mv ~/.cache/go-build-new ~/.cache/go-build
+          mv ~/.cache/go-build-new ~/.cache/go-build || true
